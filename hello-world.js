@@ -29,9 +29,17 @@ const likeBtnEl = document.createElement('button');
 likeBtnEl.classList.add('likeBtn');
 likeBtnEl.textContent = "Like";
 
+let likeAuth = true;
 likeBtnEl.addEventListener('click', function() {
-        post1.likes++;
-        postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+  if (likeAuth === true) {
+    post1.likes++;
+    postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+    likeAuth = false;
+  } else {
+      post1.likes--;
+      postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+      likeAuth = true;
+  }
     })
 
 const inputTextEl = document.createElement('input');
