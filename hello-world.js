@@ -99,3 +99,5 @@ function unlikePost(){
     const button = document.querySelector('.like-button');
     button.style.backgroundColor = '';
 }
+
+renderPosts();
