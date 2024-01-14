@@ -29,6 +29,11 @@ const likeBtnEl = document.createElement('button');
 likeBtnEl.classList.add('likeBtn');
 likeBtnEl.textContent = "Like";
 
+likeBtnEl.addEventListener('click', function() {
+        post1.likes++;
+        postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+    })
+
 const inputTextEl = document.createElement('input');
 inputTextEl.classList.add('inputText');
 
