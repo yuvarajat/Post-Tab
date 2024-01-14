@@ -7,6 +7,10 @@ let post1 ={
   comments: ['Great post!', 'Nice photo!'], 
   image: 'https://files.codingninjas.in/image2-28694.jpg' };
 
+const likedPosts = new Set();
+
+function renderPosts() {
+
 const postsEl = document.getElementById('posts');
 
 const postEl = document.createElement('div');
@@ -29,17 +33,14 @@ const likeBtnEl = document.createElement('button');
 likeBtnEl.classList.add('likeBtn');
 likeBtnEl.textContent = "Like";
 
-let likeAuth = true;
 likeBtnEl.addEventListener('click', function() {
-  if (likeAuth === true) {
-    post1.likes++;
-    postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
-    likeAuth = false;
-  } else {
-      post1.likes--;
-      postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
-      likeAuth = true;
-  }
+        if (!likedPosts.has(post1.id)) {
+	      likePost();
+          likedPosts.add(post1.id); //we add the curr post if not alrady present
+      } else {
+          unlikePost();
+          likedPosts.delete(post1.id);
+      }
     })
 
 const inputTextEl = document.createElement('input');
@@ -82,3 +83,19 @@ postFooterEl.addEventListener('click', function () {
   }
   
 })
+}
+
+function likePost(){
+    post1.likes++;
+    renderPosts(); //posts should be re-rendered with updated likes.
+    const button = document.querySelector('.like-button');
+    button.style.backgroundColor = 'red'; //changing the color on liking as per the objective.
+}
+
+function unlikePost(){
+    post1.likes--;
+    renderPosts();
+    
+    const button = document.querySelector('.like-button');
+    button.style.backgroundColor = '';
+}
