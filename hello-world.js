@@ -36,6 +36,15 @@ const commentBtnEl = document.createElement('button');
 commentBtnEl.classList.add('commentBtn');
 commentBtnEl.textContent = "Comment";
 
+commentBtnEl.addEventListener('click', function() {
+        post1.comments.push(inputTextEl.value);
+        postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+        const tempComment = document.createElement('p');
+        tempComment.textContent = inputTextEl.value;
+        commentsConEl.appendChild(tempComment);
+    })
+
+
 const postFooterEl = document.createElement('div');
 postFooterEl.classList.add('post-footer');
 postFooterEl.textContent = `Likes: ${post1.likes} Comments: ${post1.comments.length}`;
