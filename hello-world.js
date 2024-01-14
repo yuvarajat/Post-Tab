@@ -1,88 +1,96 @@
-//Complete this JS file to render the post1 on the screen with all the specified tags.
-let post1 ={
-  id: 1, 
+//Create the event Listener for the buttons.
+let post1 = {
+  id: 1,
   author: 'John',
-  content: 'My first Post!', 
-  likes: 10, 
-  comments: ['Great post!', 'Nice photo!'], 
-  image: 'https://files.codingninjas.in/image2-28694.jpg' };
-
+  content: 'My first Post!',
+  likes: 10,
+  comments: ['Great post!', 'Nice photo!'],
+  image: 'https://files.codingninjas.in/image2-28694.jpg',
+};
 const likedPosts = new Set();
 
 function renderPosts() {
+  const postsContainer = document.getElementById('posts');
+  postsContainer.innerHTML = '';
 
-const postsEl = document.getElementById('posts');
+  const postElement = document.createElement('div');
+  postElement.classList.add('post');
 
-const postEl = document.createElement('div');
-postEl.classList.add('post');
-postsEl.appendChild(postEl);
+  const authorElement = document.createElement('h3');
+  authorElement.textContent = post1.author;
 
-const authorEl = document.createElement('h3');
-authorEl.classList.add('author');
-authorEl.textContent = post1.author;
+  const contentElement = document.createElement('p');
+  contentElement.textContent = post1.content;
 
-const imageEl = document.createElement('img');
-imageEl.classList.add('image');
-imageEl.setAttribute('src', post1.image);
+  const imageElement = document.createElement('img');
+  imageElement.src = post1.image;
+  imageElement.alt = 'Post Image';
 
-const contentEl = document.createElement('p');
-contentEl.classList.add('content');
-contentEl.textContent = post1.content;
+  const likeButton = document.createElement('button');
+  likeButton.textContent = `Like`;
+  likeButton.classList.add('like-button');
+  //Add eventListerner here to update the likes.
 
-const likeBtnEl = document.createElement('button');
-likeBtnEl.classList.add('likeBtn');
-likeBtnEl.textContent = "Like";
-
-likeBtnEl.addEventListener('click', function() {
-        if (!likedPosts.has(post1.id)) {
+  likeButton.addEventListener('click', function () {
+      if (!likedPosts.has(post1.id)) {
 	      likePost();
           likedPosts.add(post1.id); //we add the curr post if not alrady present
       } else {
           unlikePost();
           likedPosts.delete(post1.id);
       }
-    })
+      
+  });
 
-const inputTextEl = document.createElement('input');
-inputTextEl.classList.add('inputText');
+  const commentInput = document.createElement('input');
+  commentInput.type = 'text';
+  commentInput.placeholder = 'Write a comment...';
 
-const commentBtnEl = document.createElement('button');
-commentBtnEl.classList.add('commentBtn');
-commentBtnEl.textContent = "Comment";
+  const commentButton = document.createElement('button');
+  commentButton.textContent = 'Comment';
+  commentButton.classList.add('comment-button');
+  //Create eventListener here for the comment button
+  commentButton.addEventListener('click', function () {
+    post1.comments.push(commentInput.value);
+    postFooter.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
+    const commentElement = document.createElement('p');
+    commentElement.textContent = commentInput.value;
+    commentsContainer.appendChild(commentElement);
+  });
 
-commentBtnEl.addEventListener('click', function() {
-        post1.comments.push(inputTextEl.value);
-        postFooterEl.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
-        const tempComment = document.createElement('p');
-        tempComment.textContent = inputTextEl.value;
-        commentsConEl.appendChild(tempComment);
-    })
+  const postFooter = document.createElement('div');
+  postFooter.classList.add('post-footer');
+  postFooter.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
 
+  const commentsContainer = document.createElement('div');
+  commentsContainer.classList.add('comments-container');
+  commentsContainer.style.display = 'none';
 
-const postFooterEl = document.createElement('div');
-postFooterEl.classList.add('post-footer');
-postFooterEl.textContent = `Likes: ${post1.likes} Comments: ${post1.comments.length}`;
+  post1.comments.forEach((comment) => {
+    const commentElement = document.createElement('p');
+    commentElement.textContent = comment;
+    commentsContainer.appendChild(commentElement);
+  });
 
-const commentsConEl = document.createElement('div');
-commentsConEl.classList.add('comments-container');
-commentsConEl.style.display = 'none';
+  postElement.appendChild(authorElement);
 
-postEl.append(authorEl, imageEl, contentEl, likeBtnEl, inputTextEl, commentBtnEl, postFooterEl, commentsConEl);
+  postElement.appendChild(imageElement);
+  postElement.appendChild(contentElement);
+  postElement.appendChild(likeButton);
+  postElement.appendChild(commentInput);
+  postElement.appendChild(commentButton);
+  postElement.appendChild(postFooter);
+  postElement.appendChild(commentsContainer);
 
-for (let i = 0; i < post1.comments.length; i++){
-  const tempComment = document.createElement('p');
-  tempComment.textContent = post1.comments[i];
-  commentsConEl.appendChild(tempComment);
-};
+  postFooter.addEventListener('click', () => {
+    if (commentsContainer.style.display === 'none') {
+      commentsContainer.style.display = 'block';
+    } else {
+      commentsContainer.style.display = 'none';
+    }
+  });
 
-postFooterEl.addEventListener('click', function () {
-  if (commentsConEl.style.display === 'none') {
-      commentsConEl.style.display = 'block';
-  } else {
-      commentsConEl.style.display = 'none';
-  }
-  
-})
+  postsContainer.appendChild(postElement);
 }
 
 function likePost(){
