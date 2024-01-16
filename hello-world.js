@@ -1,111 +1,153 @@
-//Create the event Listener for the buttons.
-let post1 = {
-  id: 1,
-  author: 'John',
-  content: 'My first Post!',
-  likes: 10,
-  comments: ['Great post!', 'Nice photo!'],
-  image: 'https://files.codingninjas.in/image2-28694.jpg',
-};
-const likedPosts = new Set();
+//for the given scaffold create event Listener and handler for the form.
 
-function renderPosts() {
-  const postsContainer = document.getElementById('posts');
-  postsContainer.innerHTML = '';
-
-  const postElement = document.createElement('div');
-  postElement.classList.add('post');
-
-  const authorElement = document.createElement('h3');
-  authorElement.textContent = post1.author;
-
-  const contentElement = document.createElement('p');
-  contentElement.textContent = post1.content;
-
-  const imageElement = document.createElement('img');
-  imageElement.src = post1.image;
-  imageElement.alt = 'Post Image';
-
-  const likeButton = document.createElement('button');
-  likeButton.textContent = `Like`;
-  likeButton.classList.add('like-button');
-  //Add eventListerner here to update the likes.
-
-  likeButton.addEventListener('click', function () {
-      if (!likedPosts.has(post1.id)) {
-	      likePost();
-          likedPosts.add(post1.id); //we add the curr post if not alrady present
-      } else {
-          unlikePost();
-          likedPosts.delete(post1.id);
-      }
-      
-  });
-
-  const commentInput = document.createElement('input');
-  commentInput.type = 'text';
-  commentInput.placeholder = 'Write a comment...';
-
-  const commentButton = document.createElement('button');
-  commentButton.textContent = 'Comment';
-  commentButton.classList.add('comment-button');
-  //Create eventListener here for the comment button
-  commentButton.addEventListener('click', function () {
-    post1.comments.push(commentInput.value);
-    postFooter.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
-    const commentElement = document.createElement('p');
-    commentElement.textContent = commentInput.value;
-    commentsContainer.appendChild(commentElement);
-  });
-
-  const postFooter = document.createElement('div');
-  postFooter.classList.add('post-footer');
-  postFooter.textContent = `Likes: ${post1.likes}   Comments: ${post1.comments.length}`;
-
-  const commentsContainer = document.createElement('div');
-  commentsContainer.classList.add('comments-container');
-  commentsContainer.style.display = 'none';
-
-  post1.comments.forEach((comment) => {
-    const commentElement = document.createElement('p');
-    commentElement.textContent = comment;
-    commentsContainer.appendChild(commentElement);
-  });
-
-  postElement.appendChild(authorElement);
-
-  postElement.appendChild(imageElement);
-  postElement.appendChild(contentElement);
-  postElement.appendChild(likeButton);
-  postElement.appendChild(commentInput);
-  postElement.appendChild(commentButton);
-  postElement.appendChild(postFooter);
-  postElement.appendChild(commentsContainer);
-
-  postFooter.addEventListener('click', () => {
-    if (commentsContainer.style.display === 'none') {
-      commentsContainer.style.display = 'block';
-    } else {
-      commentsContainer.style.display = 'none';
-    }
-  });
-
-  postsContainer.appendChild(postElement);
-}
-
-function likePost(){
-    post1.likes++;
-    renderPosts(); //posts should be re-rendered with updated likes.
-    const button = document.querySelector('.like-button');
-    button.style.backgroundColor = 'red'; //changing the color on liking as per the objective.
-}
-
-function unlikePost(){
-    post1.likes--;
-    renderPosts();
     
-    const button = document.querySelector('.like-button');
-    button.style.backgroundColor = '';
+let postsData = [
+    { id: 1, author: 'John', content: 'Hello, Instagram!', likes: 10, comments: ['Great post!', 'Nice photo!'], image: 'https://files.codingninjas.in/image2-28694.jpg' },
+    { id: 2, author: 'Jane', content: 'This is a great post!', likes: 15, comments: [], image: 'https://files.codingninjas.in/oip-28704.jpg' },
+    { id: 3, author: 'Alice', content: 'Another post', likes: 8, comments: [], image: 'https://files.codingninjas.in/th-2-28706.jpg' },
+    { id: 4, author: 'Bob', content: 'Check out this photo!', likes: 20, comments: [], image: 'https://files.codingninjas.in/image1-28708.jpg' },
+  ];
+  const likedPosts = new Set();
+  function renderPosts() {
+    const postsContainer = document.getElementById('posts');
+    postsContainer.innerHTML = '';
+  
+    postsData.forEach((post) => {
+      const postElement = document.createElement('div');
+      postElement.classList.add('post');
+  
+      const authorElement = document.createElement('h3');
+      authorElement.textContent = post.author;
+  
+      const contentElement = document.createElement('p');
+      contentElement.textContent = post.content;
+  
+      const imageElement = document.createElement('img');
+      imageElement.src = post.image;
+      imageElement.alt = 'Post Image';
+  
+      const likeButton = document.createElement('button');
+      likeButton.textContent = `Like`;
+      likeButton.classList.add('like-button');
+      likeButton.addEventListener('click', () => {
+        if (!likedPosts.has(post.id)) {
+            likePost(post.id);
+            likedPosts.add(post.id);
+            likeButton.disabled = true;  
+            for(let ind of likedPosts){
+                const button = document.querySelectorAll('.like-button')[ind-1];
+                button.style.backgroundColor = 'red';
+        
+            }
+    }
+});
+  
+      const commentInput = document.createElement('input');
+      commentInput.type = 'text';
+      commentInput.placeholder = 'Write a comment...';
+  
+      const commentButton = document.createElement('button');
+      commentButton.textContent = 'Comment';
+      commentButton.classList.add('comment-button');
+      commentButton.addEventListener('click', () => {
+        addComment(post.id, commentInput.value);
+        commentInput.value = '';
+      });
+  
+      const postFooter = document.createElement('div');
+      postFooter.classList.add('post-footer');
+      postFooter.textContent = `Likes: ${post.likes}   Comments: ${post.comments.length}`;
+  
+      const commentsContainer = document.createElement('div');
+      commentsContainer.classList.add('comments-container');
+      commentsContainer.style.display = 'none';
+  
+      post.comments.forEach((comment) => {
+        const commentElement = document.createElement('p');
+        commentElement.textContent = comment;
+        commentsContainer.appendChild(commentElement);
+      });
+  
+      postElement.appendChild(authorElement);
+
+      postElement.appendChild(imageElement);
+      postElement.appendChild(contentElement);
+      postElement.appendChild(likeButton);
+      postElement.appendChild(commentInput);
+      postElement.appendChild(commentButton);
+      postElement.appendChild(postFooter);
+      postElement.appendChild(commentsContainer);
+  
+      postFooter.addEventListener('click', () => {
+        if (commentsContainer.style.display === 'none') {
+          commentsContainer.style.display = 'block';
+        } else {
+          commentsContainer.style.display = 'none';
+        }
+      });
+  
+      postsContainer.appendChild(postElement);
+    });
+  }
+
+  // Function to handle post liking
+  function likePost(postId) {
+    const post = postsData.find(post => post.id === postId);
+    if (post) {
+      post.likes++;
+      renderPosts();
+    }
+  }
+  
+  // Function to handle adding a comment
+  function addComment(postId, comment) {
+    const post = postsData.find(post => post.id === postId);
+    if (post) {
+      post.comments.push(comment);
+      renderPosts();
+    }
+  }
+ 
+// Create your function here to handle post creation and adding Post to the postsData.
+
+function handlePostCreation(content, imageFile, author = 'You') {
+    const newPost = {
+        id: postsData.length + 1,
+        author: author,
+        content: content,
+        likes: 0,
+        comments: [],
+        image: URL.createObjectURL(imageFile),
+    };
+
+    postsData.push(newPost);
+    renderPosts();
 }
 
+const form = document.getElementById('postForm');
+
+form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const contentInput = document.getElementById('postInput');
+    const imageInput = document.getElementById('imageInput');
+
+    const content = contentInput.value;
+    const imageFile = imageInput.files[0];
+
+    if (content && imageFile) {
+        handlePostCreation(content, imageFile);
+
+        // Reset form inputs
+        contentInput.value = '';
+        imageInput.value = '';
+    } else {
+        alert('Please fill in all the required fields');
+    }
+});
+
+// Initial rendering
 renderPosts();
+
+
+  
