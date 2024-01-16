@@ -1,4 +1,4 @@
-//for the given scaffold create event Listener and handler for the form.
+
 
     
 let postsData = [
